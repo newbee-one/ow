@@ -1,844 +1,825 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f7f5">
+<title>单向历 · 今日一签</title>
+<style>
+:root{
+  --paper:#f7f7f5;
+  --ink:#242423;
+  --muted:#73736d;
+  --line:#d4d4cc;
+  font-family:"Songti SC","STSong","SimSun",serif;
+  color:var(--ink);
+  background:var(--paper);
+}
+*{box-sizing:border-box}
+body{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{cursor:wait}
+button:focus-visible{outline:2px dashed var(--ink);outline-offset:6px}
+[hidden]{display:none!important}
+header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 5%;border-bottom:1px solid var(--line)
+}
+.brand{letter-spacing:4px;font:14px Georgia,serif}
+.brand span{margin-left:16px;font-family:"Songti SC","SimSun",serif}
+.header-note{font-size:14px;letter-spacing:2px;color:var(--muted)}
+main{
+  max-width:1120px;margin:auto;padding:32px 24px 48px;
+  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.85fr);
+  gap:48px;align-items:center
+}
+.intro{text-align:center}
+.eyebrow{font:11px Georgia,serif;letter-spacing:3px}
+h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}
+.intro p{font-size:14px;color:var(--muted);line-height:1.8;margin:0}
+.machine{
+  position:relative;width:100%;max-width:570px;aspect-ratio:600/650;
+  margin:12px auto 0;container-type:inline-size;
+}
+.machine-frame{width:100%;height:100%;display:block}
+.machine-title{
+  position:absolute;left:16.67%;top:8.7%;width:66.66%;
+  text-align:center;font-size:5.6cqw;font-weight:900;letter-spacing:.38em;
+}
+.print-type{font-family:"Songti SC","STSong","SimSun",serif;font-weight:900}
+.date{
+  position:absolute;left:16.67%;top:18.5%;width:66.66%;height:28%;
+  text-align:center;
+}
+.month{
+  position:absolute;top:0;left:0;width:100%;
+  font-size:3cqw;line-height:1;letter-spacing:.15em;
+}
+.day{
+  position:absolute;top:18%;left:0;width:100%;
+  font:normal 15cqw/.95 Georgia,"Times New Roman",serif;
+  letter-spacing:0;font-variant-numeric:lining-nums;
+}
+.week{
+  position:absolute;top:72%;left:0;width:100%;
+  font-size:2.7cqw;line-height:1;letter-spacing:.15em;
+}
+.year{
+  position:absolute;top:85%;left:0;width:100%;
+  font:2.3cqw/1 Georgia,serif;letter-spacing:.22em;
+}
+.advice{
+  position:absolute;left:16.67%;top:50.4%;width:66.66%;height:7%;
+  display:grid;place-items:center;overflow:hidden;
+  font-size:5cqw;letter-spacing:.12em;
+}
+.quote{
+  position:absolute;left:19%;top:62.1%;width:62%;height:13%;
+  display:flex;flex-direction:column;justify-content:center;text-align:center;
+}
+.quote p{
+  white-space:pre-line;font-size:3cqw;line-height:1.65;
+  margin:0 0 1.3cqw;font-weight:600;
+}
+.quote small{font-size:1.9cqw;color:var(--muted);letter-spacing:.1em}
+.lever{
+  position:absolute;left:84%;top:38%;width:13%;height:30%;
+  padding:0;background:none;border:0;transform-origin:15% 95%;
+  touch-action:none;transition:transform .2s;
+}
+.lever svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+.lever:hover .ball{fill:#444}
+.lever.pulled{transform:rotate(30deg)}
+.print-button{
+  position:absolute;left:43.5%;top:78.1%;width:13%;height:7%;
+  min-height:30px;padding:0;border:0;background:none;
+}
+.print-button svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+.print-button:hover ellipse{fill:#ecece8}
+.print-button:active{transform:translateY(3px)}
+.print-button:disabled{opacity:.55}
+.ticket-slot{
+  position:absolute;left:29%;top:90%;width:42%;height:5%;
+  overflow:hidden;pointer-events:none;
+}
+.ticket{
+  border:1px solid var(--ink);background:white;text-align:center;
+  padding:8px;letter-spacing:4px;font-size:14px;
+  transform:translateY(-110%);
+}
+.printing .ticket{animation:ticket-out 1s ease-in-out}
+.rolling .advice span,.rolling .quote p{animation:roll .13s linear infinite}
+.status{
+  min-height:40px;text-align:center;font-size:14px;line-height:1.7;
+  color:var(--muted);margin:8px 0;
+}
+.steps{display:flex;justify-content:center;gap:18px;font-size:12px;color:var(--muted)}
+.empty{
+  min-height:440px;border:1px dashed #babaae;padding:36px;
+  display:flex;flex-direction:column;transform:rotate(1deg);background:#ffffff50;
+}
+.empty-number{font:12px Georgia,serif;letter-spacing:3px;color:var(--muted)}
+.empty h2{font-size:27px;font-weight:400;line-height:1.8;margin:55px 0 20px}
+.empty p{font-size:15px;color:var(--muted);line-height:2}
+.empty-bottom{margin-top:auto;font-size:12px;letter-spacing:6px}
+.card-top{
+  display:flex;justify-content:space-between;margin-bottom:13px;
+  font:10px Georgia,serif;letter-spacing:2px;color:var(--muted);
+}
+.card{
+  background:#fff;border:1px solid var(--line);padding:25px 28px 18px;
+  box-shadow:0 8px 30px #0000000a;
+}
+.card-brand{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:15px;border-bottom:1px solid var(--ink);
+  font-size:20px;letter-spacing:3px;font-weight:700;
+}
+.card-brand small{font-size:12px;font-weight:400;letter-spacing:1px}
+.card-date{text-align:center;margin:21px 0 16px}
+.card-date span{display:block;font-size:13px;letter-spacing:2px}
+.card-date strong{display:block;font:100px/1 Georgia,serif;margin:8px 0}
+.card h2{text-align:center;font-size:25px;letter-spacing:2px;margin:18px 0}
+.card blockquote{
+  margin:0;text-align:center;white-space:pre-line;font-size:17px;line-height:1.9;
+}
+.credit{text-align:center;font-size:11px;color:var(--muted);margin:12px 0 22px}
+.tear{border-top:1px dashed #aaa;margin:0 -28px 22px}
+.drink-label{font-size:12px;letter-spacing:2px}
+.drink h3{font-size:24px;margin:10px 0 4px;letter-spacing:2px}
+.drink-en{font:13px Georgia,serif;color:var(--muted)}
+.drink p{font-size:14px;line-height:1.9}
+.mood{font-size:12px;color:var(--muted)}
+.card-footer{
+  display:flex;justify-content:space-between;border-top:1px solid var(--line);
+  padding-top:14px;margin-top:23px;font:10px Georgia,serif;letter-spacing:2px;
+}
+.save{
+  width:100%;display:flex;justify-content:space-between;
+  margin-top:15px;padding:14px 18px;background:var(--ink);color:white;
+  border:1px solid var(--ink);font-size:14px;letter-spacing:2px;
+}
+.save:hover{background:#444}
+.save-note{font-size:11px;text-align:center;line-height:1.8;color:var(--muted)}
+.page-footer{
+  max-width:1080px;margin:auto;padding:22px 24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
+}
+.appear{animation:appear .6s ease both}
+@keyframes roll{
+  from{transform:translateY(-45%);filter:blur(2px)}
+  to{transform:translateY(45%);filter:blur(2px)}
+}
+@keyframes ticket-out{
+  0%{transform:translateY(-110%)}
+  65%{transform:translateY(0)}
+  100%{transform:translateY(110%)}
+}
+@keyframes appear{
+  from{opacity:0;transform:translateY(24px) rotate(-2deg)}
+  to{opacity:1;transform:none}
+}
+@media(max-width:760px){
+  header{padding:20px}.header-note{display:none}
+  main{display:block;padding:28px 12px}
+  h1{font-size:24px}.intro p{font-size:13px}
+  .card-area{max-width:390px;margin:30px auto 0;padding:0 10px}
+  .empty{min-height:240px;padding:26px}
+  .empty h2{font-size:24px;margin:24px 0 10px}
+  .empty p{margin:0 0 20px;font-size:14px}
+  .page-footer{margin:0 18px;padding:20px 0;font-size:11px;gap:20px}
+  .steps{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="zh-CN"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width,initial-scale=1"&gt;</p>
-<p class="p1">&lt;meta name="theme-color" content="#f7f7f5"&gt;</p>
-<p class="p1">&lt;title&gt;单向历 · 今日一签&lt;/title&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1">:root{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--paper:#f7f7f5;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--ink:#242423;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--muted:#73736d;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>--line:#d4d4cc;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-family:"Songti SC","STSong","SimSun",serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:var(--ink);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:var(--paper);</p>
-<p class="p1">}</p>
-<p class="p1">*{box-sizing:border-box}</p>
-<p class="p1">body{margin:0}</p>
-<p class="p1">button{font:inherit;color:inherit;cursor:pointer}</p>
-<p class="p1">button:disabled{cursor:wait}</p>
-<p class="p1">button:focus-visible{outline:2px dashed var(--ink);outline-offset:6px}</p>
-<p class="p1">[hidden]{display:none!important}</p>
-<p class="p1">header{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;justify-content:space-between;align-items:center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:24px 5%;border-bottom:1px solid var(--line)</p>
-<p class="p1">}</p>
-<p class="p1">.brand{letter-spacing:4px;font:14px Georgia,serif}</p>
-<p class="p1">.brand span{margin-left:16px;font-family:"Songti SC","SimSun",serif}</p>
-<p class="p1">.header-note{font-size:14px;letter-spacing:2px;color:var(--muted)}</p>
-<p class="p1">main{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>max-width:1120px;margin:auto;padding:32px 24px 48px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,.85fr);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>gap:48px;align-items:center</p>
-<p class="p1">}</p>
-<p class="p1">.intro{text-align:center}</p>
-<p class="p1">.eyebrow{font:11px Georgia,serif;letter-spacing:3px}</p>
-<p class="p1">h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}</p>
-<p class="p1">.intro p{font-size:14px;color:var(--muted);line-height:1.8;margin:0}</p>
-<p class="p1">.machine{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:relative;width:100%;max-width:570px;aspect-ratio:600/650;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin:12px auto 0;container-type:inline-size;</p>
-<p class="p1">}</p>
-<p class="p1">.machine-frame{width:100%;height:100%;display:block}</p>
-<p class="p1">.machine-title{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:16.67%;top:8.7%;width:66.66%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align:center;font-size:5.6cqw;font-weight:900;letter-spacing:.38em;</p>
-<p class="p1">}</p>
-<p class="p1">.print-type{font-family:"Songti SC","STSong","SimSun",serif;font-weight:900}</p>
-<p class="p1">.date{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:16.67%;top:18.5%;width:66.66%;height:28%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>text-align:center;</p>
-<p class="p1">}</p>
-<p class="p1">.month{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;top:0;left:0;width:100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:3cqw;line-height:1;letter-spacing:.15em;</p>
-<p class="p1">}</p>
-<p class="p1">.day{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;top:18%;left:0;width:100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font:normal 15cqw/.95 Georgia,"Times New Roman",serif;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>letter-spacing:0;font-variant-numeric:lining-nums;</p>
-<p class="p1">}</p>
-<p class="p1">.week{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;top:72%;left:0;width:100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:2.7cqw;line-height:1;letter-spacing:.15em;</p>
-<p class="p1">}</p>
-<p class="p1">.year{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;top:85%;left:0;width:100%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font:2.3cqw/1 Georgia,serif;letter-spacing:.22em;</p>
-<p class="p1">}</p>
-<p class="p1">.advice{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:16.67%;top:50.4%;width:66.66%;height:7%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:grid;place-items:center;overflow:hidden;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:5cqw;letter-spacing:.12em;</p>
-<p class="p1">}</p>
-<p class="p1">.quote{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:19%;top:62.1%;width:62%;height:13%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;flex-direction:column;justify-content:center;text-align:center;</p>
-<p class="p1">}</p>
-<p class="p1">.quote p{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>white-space:pre-line;font-size:3cqw;line-height:1.65;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin:0 0 1.3cqw;font-weight:600;</p>
-<p class="p1">}</p>
-<p class="p1">.quote small{font-size:1.9cqw;color:var(--muted);letter-spacing:.1em}</p>
-<p class="p1">.lever{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:84%;top:38%;width:13%;height:30%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:0;background:none;border:0;transform-origin:15% 95%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>touch-action:none;transition:transform .2s;</p>
-<p class="p1">}</p>
-<p class="p1">.lever svg{width:100%;height:100%;overflow:visible;pointer-events:none}</p>
-<p class="p1">.lever:hover .ball{fill:#444}</p>
-<p class="p1">.lever.pulled{transform:rotate(30deg)}</p>
-<p class="p1">.print-button{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:43.5%;top:78.1%;width:13%;height:7%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height:30px;padding:0;border:0;background:none;</p>
-<p class="p1">}</p>
-<p class="p1">.print-button svg{width:100%;height:100%;overflow:visible;pointer-events:none}</p>
-<p class="p1">.print-button:hover ellipse{fill:#ecece8}</p>
-<p class="p1">.print-button:active{transform:translateY(3px)}</p>
-<p class="p1">.print-button:disabled{opacity:.55}</p>
-<p class="p1">.ticket-slot{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>position:absolute;left:29%;top:90%;width:42%;height:5%;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overflow:hidden;pointer-events:none;</p>
-<p class="p1">}</p>
-<p class="p1">.ticket{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--ink);background:white;text-align:center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding:8px;letter-spacing:4px;font-size:14px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>transform:translateY(-110%);</p>
-<p class="p1">}</p>
-<p class="p1">.printing .ticket{animation:ticket-out 1s ease-in-out}</p>
-<p class="p1">.rolling .advice span,.rolling .quote p{animation:roll .13s linear infinite}</p>
-<p class="p1">.status{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height:40px;text-align:center;font-size:14px;line-height:1.7;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>color:var(--muted);margin:8px 0;</p>
-<p class="p1">}</p>
-<p class="p1">.steps{display:flex;justify-content:center;gap:18px;font-size:12px;color:var(--muted)}</p>
-<p class="p1">.empty{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>min-height:440px;border:1px dashed #babaae;padding:36px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;flex-direction:column;transform:rotate(1deg);background:#ffffff50;</p>
-<p class="p1">}</p>
-<p class="p1">.empty-number{font:12px Georgia,serif;letter-spacing:3px;color:var(--muted)}</p>
-<p class="p1">.empty h2{font-size:27px;font-weight:400;line-height:1.8;margin:55px 0 20px}</p>
-<p class="p1">.empty p{font-size:15px;color:var(--muted);line-height:2}</p>
-<p class="p1">.empty-bottom{margin-top:auto;font-size:12px;letter-spacing:6px}</p>
-<p class="p1">.card-top{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;justify-content:space-between;margin-bottom:13px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font:10px Georgia,serif;letter-spacing:2px;color:var(--muted);</p>
-<p class="p1">}</p>
-<p class="p1">.card{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>background:#fff;border:1px solid var(--line);padding:25px 28px 18px;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>box-shadow:0 8px 30px #0000000a;</p>
-<p class="p1">}</p>
-<p class="p1">.card-brand{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;justify-content:space-between;align-items:center;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding-bottom:15px;border-bottom:1px solid var(--ink);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>font-size:20px;letter-spacing:3px;font-weight:700;</p>
-<p class="p1">}</p>
-<p class="p1">.card-brand small{font-size:12px;font-weight:400;letter-spacing:1px}</p>
-<p class="p1">.card-date{text-align:center;margin:21px 0 16px}</p>
-<p class="p1">.card-date span{display:block;font-size:13px;letter-spacing:2px}</p>
-<p class="p1">.card-date strong{display:block;font:100px/1 Georgia,serif;margin:8px 0}</p>
-<p class="p1">.card h2{text-align:center;font-size:25px;letter-spacing:2px;margin:18px 0}</p>
-<p class="p1">.card blockquote{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin:0;text-align:center;white-space:pre-line;font-size:17px;line-height:1.9;</p>
-<p class="p1">}</p>
-<p class="p1">.credit{text-align:center;font-size:11px;color:var(--muted);margin:12px 0 22px}</p>
-<p class="p1">.tear{border-top:1px dashed #aaa;margin:0 -28px 22px}</p>
-<p class="p1">.drink-label{font-size:12px;letter-spacing:2px}</p>
-<p class="p1">.drink h3{font-size:24px;margin:10px 0 4px;letter-spacing:2px}</p>
-<p class="p1">.drink-en{font:13px Georgia,serif;color:var(--muted)}</p>
-<p class="p1">.drink p{font-size:14px;line-height:1.9}</p>
-<p class="p1">.mood{font-size:12px;color:var(--muted)}</p>
-<p class="p1">.card-footer{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;justify-content:space-between;border-top:1px solid var(--line);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>padding-top:14px;margin-top:23px;font:10px Georgia,serif;letter-spacing:2px;</p>
-<p class="p1">}</p>
-<p class="p1">.save{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>width:100%;display:flex;justify-content:space-between;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>margin-top:15px;padding:14px 18px;background:var(--ink);color:white;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>border:1px solid var(--ink);font-size:14px;letter-spacing:2px;</p>
-<p class="p1">}</p>
-<p class="p1">.save:hover{background:#444}</p>
-<p class="p1">.save-note{font-size:11px;text-align:center;line-height:1.8;color:var(--muted)}</p>
-<p class="p1">.page-footer{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>max-width:1080px;margin:auto;padding:22px 24px;border-top:1px solid var(--line);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>display:flex;justify-content:space-between;font-size:12px;color:var(--muted);</p>
-<p class="p1">}</p>
-<p class="p1">.appear{animation:appear .6s ease both}</p>
-<p class="p1">@keyframes roll{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>from{transform:translateY(-45%);filter:blur(2px)}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to{transform:translateY(45%);filter:blur(2px)}</p>
-<p class="p1">}</p>
-<p class="p1">@keyframes ticket-out{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>0%{transform:translateY(-110%)}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>65%{transform:translateY(0)}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>100%{transform:translateY(110%)}</p>
-<p class="p1">}</p>
-<p class="p1">@keyframes appear{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>from{opacity:0;transform:translateY(24px) rotate(-2deg)}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>to{opacity:1;transform:none}</p>
-<p class="p1">}</p>
-<p class="p1">@media(max-width:760px){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>header{padding:20px}.header-note{display:none}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>main{display:block;padding:28px 12px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>h1{font-size:24px}.intro p{font-size:13px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.card-area{max-width:390px;margin:30px auto 0;padding:0 10px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.empty{min-height:240px;padding:26px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.empty h2{font-size:24px;margin:24px 0 10px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.empty p{margin:0 0 20px;font-size:14px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.page-footer{margin:0 18px;padding:20px 0;font-size:11px;gap:20px}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>.steps{gap:12px}</p>
-<p class="p1">}</p>
-<p class="p1">@media(prefers-reduced-motion:reduce){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>*,*::before,*::after{animation:none!important;transition:none!important}</p>
-<p class="p1">}</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1">&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="brand"&gt;OWSPACE &lt;span&gt;单向历&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;span class="header-note"&gt;日子有定，偶遇随机。&lt;/span&gt;</p>
-<p class="p1">&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;main&gt;</p>
-<p class="p1">&lt;section aria-label="单向历抽签机"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="intro"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="eyebrow"&gt;THE DAILY CHANCE&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;给今天，一点偶然。&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;拉下把手抽一签，再按按钮印下今日小卡。&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="machine" id="machine"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 内联轮廓，不依赖外部图片。 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;svg class="machine-frame" viewBox="0 0 600 650"</p>
-<p class="p1"><span class="Apple-converted-space">         </span>aria-hidden="true" xmlns="http://www.w3.org/2000/svg"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;g fill="none" stroke="#242423" stroke-width="1.8"</p>
-<p class="p1"><span class="Apple-converted-space">         </span>stroke-linecap="round" stroke-linejoin="round"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M84 39 L497 42 L510 508 L91 510 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M84 39 L74 51 L57 551 L67 614 L525 611 L526 548 L510 508"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M74 51 L485 53 L497 42"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M91 510 L57 551 L526 548 L510 508"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M57 551 L526 548"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M100 105 L480 107 L483 305 L98 307 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M106 113 L473 115 L476 297 L105 298 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ellipse cx="290" cy="128" rx="51" ry="15"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M96 321 Q93 319 92 326 L91 376</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>Q93 383 100 382 L484 380</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>Q490 379 489 372 L488 325 Q487 319 480 321 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M101 327 L479 327 L480 374 L100 375 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M92 394 L490 393 L494 494 L89 496 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M99 401 L483 401 L486 487 L97 488 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M174 575 L422 573 L422 607 L173 609 Z"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M180 578 L180 601 L416 600 L416 576"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M173 609 L180 601 M422 607 L416 600"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M192 533 L244 532 M349 533 L400 532"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M509 424 L522 424 L523 452 L511 455"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/g&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/svg&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="machine-title print-type"&gt;单向历&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="date"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="month" id="month"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;strong class="day" id="day"&gt;&lt;/strong&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="week" id="week"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span class="year" id="year"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="advice print-type"&gt;&lt;span id="advice"&gt;&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="quote"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p id="quote"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;small id="quote-credit"&gt;— 今日短句 · 原创 —&lt;/small&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="lever" id="lever" type="button"</p>
-<p class="p1"><span class="Apple-converted-space">            </span>aria-label="拉下把手，随机抽签" title="向下拖动或点击抽签"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg viewBox="0 0 75 195" aria-hidden="true"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M11 187 L48 30 L54 31 L17 189 Z"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>fill="#f7f7f5" stroke="#242423" stroke-width="1.8"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;circle class="ball" cx="52" cy="24" r="21" fill="#242423"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ellipse cx="45" cy="16" rx="4" ry="5" fill="white"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="print-button" id="print" type="button"</p>
-<p class="p1"><span class="Apple-converted-space">            </span>aria-label="生成今日小卡" title="印下今日小卡"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;svg viewBox="0 0 80 45" aria-hidden="true"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;path d="M10 16 L10 31 C10 45 70 45 70 31 L70 16"</p>
-<p class="p1"><span class="Apple-converted-space">              </span>fill="#f7f7f5" stroke="#242423" stroke-width="1.8"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;ellipse cx="40" cy="16" rx="30" ry="12"</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>fill="white" stroke="#242423" stroke-width="1.8"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="ticket-slot"&gt;&lt;div class="ticket"&gt;今日一签&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="status" id="status" role="status" aria-live="polite"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>把手可以向下拖动，也可以轻点。</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="steps"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span&gt;01 拉下把手&lt;/span&gt;&lt;span&gt;02 按钮出卡&lt;/span&gt;&lt;span&gt;03 收藏今日&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;aside class="card-area" aria-label="今日小卡"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="empty" id="empty"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="empty-number"&gt;№ 001&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;今天的偶然，&lt;br&gt;还在路上。&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;按下机器中间的按钮，&lt;br&gt;一张日历、一句话、一杯酒，&lt;br&gt;一起留在小卡上。&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;span class="empty-bottom"&gt;待 出 卡&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="result" hidden&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-top"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;span&gt;YOUR DAILY EDITION&lt;/span&gt;&lt;span id="card-no"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;article class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-brand"&gt;单向历 &lt;small&gt;今日一签&lt;/small&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="card-date"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="card-month"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;strong id="card-day"&gt;&lt;/strong&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="card-week"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2 id="card-advice"&gt;&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;blockquote id="card-quote"&gt;&lt;/blockquote&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="credit" id="card-credit"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tear"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;section class="drink"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="drink-label"&gt;为这一刻，配一杯&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h3 id="card-drink"&gt;&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="drink-en" id="card-en"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p id="card-note"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="mood" id="card-mood"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/section&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;footer class="card-footer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span id="card-date"&gt;&lt;/span&gt;&lt;span&gt;OWSPACE&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/article&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="save" id="save" type="button"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>保存今日小卡 &lt;span&gt;↓&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="save-note"&gt;配酒为主题搭配灵感 · 请适量饮用&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/aside&gt;</p>
-<p class="p1">&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;footer class="page-footer"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;span&gt;单向历 · 今日一签&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;span&gt;每一次偶遇，都值得被留下。&lt;/span&gt;</p>
-<p class="p1">&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1">"use strict";</p>
-<p class="p2"><br></p>
-<p class="p1">/*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* AI 接口预留</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 默认关闭，保存为本地 HTML 后无需服务器即可使用全部 50 组内容。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 开启方式：</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 1. 自行部署后端代理，将 API 密钥放在后端环境变量中。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 2. enabled 改为 true，endpoint 填入自己的后端地址。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 3. 不要在 HTML、前端 JS 或请求参数里放服务商 API 密钥。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* POST 请求：</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* {</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>date: "2026.09.11",</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>selectedCocktail: { id, name, englishName },</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>fallback: { advice, quote }</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* }</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* JSON 响应：</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* {</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>advice: "宜 留点空白",</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>quote: "把一天留白一点，\n才有地方容纳偶然。",</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>note: "为今天的一点留白，配一杯金汤力。",</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* <span class="Apple-converted-space">  </span>mood: "留白 · 偶然"</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* }</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 接口应生成原创短句，不要伪造文学作者和出处。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 本地 file:// 调用远程接口时，需要后端配置适当的 CORS。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 服务端还应实现鉴权、请求校验和速率限制。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*/</p>
-<p class="p1">const AI_CONFIG = Object.freeze({</p>
-<p class="p1"><span class="Apple-converted-space">  </span>enabled: false,</p>
-<p class="p1"><span class="Apple-converted-space">  </span>endpoint: "",</p>
-<p class="p1"><span class="Apple-converted-space">  </span>timeoutMs: 10000</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">/*</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 数据列：</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 英文名 | 中文名 | 宜忌 | 原创短句（/ 表示换行） | 搭配心情</p>
-<p class="p1"><span class="Apple-converted-space"> </span>* 保留用户提供的全部 50 款，包括 Alexander 与 Brandy Alexander。</p>
-<p class="p1"><span class="Apple-converted-space"> </span>*/</p>
-<p class="p1">const RAW_DATA = `</p>
-<p class="p1">Americano|阿美利加诺|宜 闲坐片刻|坐下来，听时间/把脚步放轻。|闲适 · 街角</p>
-<p class="p1">John Collins|约翰柯林斯|宜 轻松开场|不必准备完美的开头，/一句你好就够了。|交谈 · 松弛</p>
-<p class="p1">Horse’s Neck|马颈|宜 信步而行|沿着弯曲的小路，/也能走进开阔的今天。|漫步 · 好奇</p>
-<p class="p1">Cuba Libre|自由古巴|忌 自设围墙|窗外没有催促，/是心先想起了远方。|自由 · 出走</p>
-<p class="p1">Moscow Mule|莫斯科骡子|宜 坚持小事|把一件小事做好，/也是向生活迈进一步。|踏实 · 耐心</p>
-<p class="p1">Zombie|僵尸|忌 机械重复|别让昨天的惯性，/替今天写完所有台词。|变化 · 新意</p>
-<p class="p1">Mai Tai|迈泰|宜 想象假期|还没出发的假期，/也能先在心里放晴。|假日 · 想象</p>
-<p class="p1">Bloody Mary|血腥玛丽|忌 千篇一律|把不同的那一面，/也放进今天的生活。|个性 · 尝试</p>
-<p class="p1">Piña Colada|椰林飘香|宜 偷闲半日|今天的空白，/不必急着填满。|休闲 · 放空</p>
-<p class="p1">Sea Breeze|海风|宜 开窗听风|风经过窗口，/没有带来待办清单。|开阔 · 自在</p>
-<p class="p1">Old Fashioned|古典|宜 重逢自己|走过那么多地方，/也别忘了回到自己身旁。|回望 · 熟悉</p>
-<p class="p1">Negroni|尼格罗尼|忌 讨好所有|不必成为所有人的风景，/先做自己的窗。|独立 · 坦然</p>
-<p class="p1">Manhattan|曼哈顿|忌 急于答案|有时，问题本身/就是一条值得走的路。|思索 · 从容</p>
-<p class="p1">Boulevardier|花花公子|宜 盛装赴约|认真选择一件衣服，/也是认真迎接今天。|仪式 · 赴约</p>
-<p class="p1">Dry Martini|干马天尼|忌 过度解释|有些沉默，/已经把自己说得很完整。|简洁 · 沉静</p>
-<p class="p1">Whiskey Sour|威士忌酸|忌 预支明天|明天还没有来，/先把今天好好收下。|当下 · 平衡</p>
-<p class="p1">Daiquiri|得其利|宜 化繁为简|少带一点行李，/就多一点伸手的余地。|简单 · 轻盈</p>
-<p class="p1">Margarita|玛格丽特|宜 小小冒险|在熟悉的路上拐个弯，/故事就有了新的一页。|探索 · 勇气</p>
-<p class="p1">Sidecar|边车|宜 并肩同行|有人一起走，/寻常的路也有了回声。|陪伴 · 同行</p>
-<p class="p1">Black Russian|黑俄罗斯|宜 安静独处|把喧闹留在门外，/听自己把一句话说完。|安静 · 内省</p>
-<p class="p1">Godfather|教父|宜 守住承诺|可靠并不喧哗，/它只是如约而来。|承诺 · 笃定</p>
-<p class="p1">Martinez|马丁内斯|宜 翻阅旧书|旧书的折角里，/还住着从前的自己。|阅读 · 重温</p>
-<p class="p1">Gin Tonic|金汤力|宜 留点空白|把一天留白一点，/才有地方容纳偶然。|留白 · 偶然</p>
-<p class="p1">Screwdriver|螺丝起子|宜 动手试试|想到的那件小事，/不妨从双手开始。|行动 · 创造</p>
-<p class="p1">Rusty Nail|生锈钉|忌 执着旧事|有些钉子松开了，/墙上才挂得下新风景。|放下 · 更新</p>
-<p class="p1">Alexander|亚历山大|宜 温柔以待|把话说轻一些，/也能让心意被听见。|温柔 · 体贴</p>
-<p class="p1">White Lady|白色佳人|忌 匆忙定义|一朵云不需要名字，/也能好好经过天空。|开放 · 留白</p>
-<p class="p1">Gin Sling|金司令|宜 随心摇摆|偶尔不踩整齐的拍子，/也能跳完自己的舞。|节奏 · 自如</p>
-<p class="p1">Planter's Punch|种植者宾治|宜 播种期待|埋下一颗小小的种子，/把等待交给日常。|生长 · 期待</p>
-<p class="p1">Gold Rush|淘金热|忌 追逐所有|不必捡起每一道光，/握住照亮你的那一束。|专注 · 取舍</p>
-<p class="p1">Long Island Iced Tea|长岛冰茶|宜 聊到尽兴|话题绕了几个弯，/才走到真正想说的地方。|交谈 · 相聚</p>
-<p class="p1">Grasshopper|蚱蜢|宜 轻巧转身|换个方向，/也许就遇见另一片草地。|灵动 · 转机</p>
-<p class="p1">Godmother|教母|宜 关照他人|记得别人随口的小事，/也是一种温柔。|关怀 · 细心</p>
-<p class="p1">Kamikaze|神风|忌 冲动决定|让念头停一停，/再决定把脚步交给哪里。|审慎 · 自主</p>
-<p class="p1">Paper Plane|纸飞机|宜 寄出心意|把没说出口的话折好，/让它去见想念的人。|想念 · 表达</p>
-<p class="p1">Penicillin|盘尼西林|宜 照顾自己|把照顾别人的耐心，/也分一点给自己。|关照 · 休息</p>
-<p class="p1">Pisco Sour|皮斯科酸|宜 认识不同|多听一种声音，/世界就多开一扇窗。|好奇 · 倾听</p>
-<p class="p1">French Martini|法国马天尼|宜 写封情书|认真写下的喜欢，/会让平常的一天发亮。|浪漫 · 真诚</p>
-<p class="p1">Dirty Martini|脏马天尼|忌 苛求完美|一点不整齐，/正好证明生活来过。|真实 · 接纳</p>
-<p class="p1">White Negroni|白尼格罗尼|宜 换个角度|把熟悉的画面翻一页，/还能读出新的意思。|视角 · 发现</p>
-<p class="p1">Jungle Bird|丛林鸟|宜 走近自然|离开屏幕一会儿，/去看树影怎么移动。|自然 · 观察</p>
-<p class="p1">Rob Roy|罗布罗伊|宜 坚定表达|声音不必很大，/也可以把心意说清。|坚定 · 诚恳</p>
-<p class="p1">Bamboo|竹|宜 保留弹性|不必每次都硬碰硬，/弯一弯也能继续生长。|柔韧 · 从容</p>
-<p class="p1">Irish Coffee|爱尔兰咖啡|宜 重温片刻|有些寻常的下午，/想起来仍有温度。|回忆 · 温暖</p>
-<p class="p1">Bee’s Knees|蜜蜂之膝|宜 赞美小事|今天也有值得夸奖的事，/比如你认真看了一朵花。|欣赏 · 善意</p>
-<p class="p1">Bramble|黑莓|宜 寻找细节|不被留意的小角落，/也藏着完整的风景。|细节 · 观察</p>
-<p class="p1">Scofflaw|斯考夫劳|忌 照单全收|别人的地图，/未必标着你想去的地方。|判断 · 自主</p>
-<p class="p1">Gimlet|吉姆雷特|宜 直抒胸臆|绕了很久的话，/今天试着直接说。|直接 · 坦诚</p>
-<p class="p1">Brandy Alexander|白兰地亚历山大|宜 收藏温柔|把被善待的瞬间记下，/阴天也有可以翻开的光。|珍藏 · 温柔</p>
-<p class="p1">Gin Fizz|金菲士|宜 重新开始|翻到新的一页，/第一行仍然由你来写。|起点 · 新鲜</p>
-<p class="p1">`;</p>
-<p class="p2"><br></p>
-<p class="p1">const DATABASE = RAW_DATA.trim().split("\n").map((line,index)=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const [englishName,name,advice,quote,mood] = line.split("|");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return Object.freeze({</p>
-<p class="p1"><span class="Apple-converted-space">    </span>id:index+1,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>englishName,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>name,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>advice,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>quote:quote.replaceAll("/","\n"),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>mood,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>note:`为今天的「${advice.slice(2)}」，配一杯${name}。`,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>credit:"今日短句 · 原创"</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">const $ = id=&gt;document.getElementById(id);</p>
-<p class="p1">const reduceMotion = ()=&gt;window.matchMedia("(prefers-reduced-motion: reduce)").matches;</p>
-<p class="p1">const sleep = ms=&gt;new Promise(resolve=&gt;setTimeout(resolve,ms));</p>
-<p class="p2"><br></p>
-<p class="p1">/* 日期在打开页面时确定，抽签不改变日期。 */</p>
-<p class="p1">const openedAt = new Date();</p>
-<p class="p1">const DATE = Object.freeze({</p>
-<p class="p1"><span class="Apple-converted-space">  </span>day:String(openedAt.getDate()).padStart(2,"0"),</p>
-<p class="p1"><span class="Apple-converted-space">  </span>month:openedAt.toLocaleDateString("zh-CN",{month:"long"}),</p>
-<p class="p1"><span class="Apple-converted-space">  </span>week:openedAt.toLocaleDateString("zh-CN",{weekday:"long"}),</p>
-<p class="p1"><span class="Apple-converted-space">  </span>year:String(openedAt.getFullYear()),</p>
-<p class="p1"><span class="Apple-converted-space">  </span>full:[</p>
-<p class="p1"><span class="Apple-converted-space">    </span>openedAt.getFullYear(),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>String(openedAt.getMonth()+1).padStart(2,"0"),</p>
-<p class="p1"><span class="Apple-converted-space">    </span>String(openedAt.getDate()).padStart(2,"0")</p>
-<p class="p1"><span class="Apple-converted-space">  </span>].join(".")</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">let currentIndex = 22;</p>
-<p class="p1">let current = {...DATABASE[currentIndex]};</p>
-<p class="p1">let printed = null;</p>
-<p class="p1">let busy = false;</p>
-<p class="p1">let serial = 0;</p>
-<p class="p2"><br></p>
-<p class="p1">$("month").textContent = DATE.month;</p>
-<p class="p1">$("day").textContent = DATE.day;</p>
-<p class="p1">$("week").textContent = DATE.week;</p>
-<p class="p1">$("year").textContent = DATE.year;</p>
-<p class="p2"><br></p>
-<p class="p1">function renderMachine(entry){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("advice").textContent = entry.advice;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("quote").textContent = entry.quote;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("quote-credit").textContent = `— ${entry.credit} —`;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function setBusy(value){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>busy = value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").disabled = value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("print").disabled = value;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("machine").setAttribute("aria-busy",String(value));</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 拒绝采样，避免取模偏差；无 Web Crypto 时退回普通随机数。 */</p>
-<p class="p1">function randomInteger(max){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!Number.isInteger(max)||max&lt;1) throw new Error("Invalid random range");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!globalThis.crypto?.getRandomValues) return Math.floor(Math.random()*max);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const limit = Math.floor(4294967296/max)*max;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const buffer = new Uint32Array(1);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>do{crypto.getRandomValues(buffer)}while(buffer[0]&gt;=limit);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return buffer[0]%max;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 每次避开上一款，其余酒款均可被抽取。 */</p>
-<p class="p1">function nextIndex(previous){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return (previous+1+randomInteger(DATABASE.length-1))%DATABASE.length;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function boundedText(value,maxLength){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return typeof value==="string" &amp;&amp;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>value.trim().length&gt;0 &amp;&amp;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>Array.from(value.trim()).length&lt;=maxLength;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">async function requestAI(entry){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!AI_CONFIG.enabled) return {entry,usedFallback:false};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const controller = new AbortController();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const timer = setTimeout(()=&gt;controller.abort(),AI_CONFIG.timeoutMs);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!AI_CONFIG.endpoint) throw new Error("AI endpoint is not configured");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const endpoint = new URL(AI_CONFIG.endpoint,window.location.href);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!["https:","http:"].includes(endpoint.protocol)){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>throw new Error("Unsupported endpoint");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const response = await fetch(endpoint.href,{</p>
-<p class="p1"><span class="Apple-converted-space">      </span>method:"POST",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>headers:{"Content-Type":"application/json"},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>signal:controller.signal,</p>
-<p class="p1"><span class="Apple-converted-space">      </span>credentials:"same-origin",</p>
-<p class="p1"><span class="Apple-converted-space">      </span>body:JSON.stringify({</p>
-<p class="p1"><span class="Apple-converted-space">        </span>date:DATE.full,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>selectedCocktail:{</p>
-<p class="p1"><span class="Apple-converted-space">          </span>id:entry.id,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>name:entry.name,</p>
-<p class="p1"><span class="Apple-converted-space">          </span>englishName:entry.englishName</p>
-<p class="p1"><span class="Apple-converted-space">        </span>},</p>
-<p class="p1"><span class="Apple-converted-space">        </span>fallback:{advice:entry.advice,quote:entry.quote}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>})</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!response.ok) throw new Error("AI request failed");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const data = await response.json();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!boundedText(data.advice,9)||!/^[宜忌]\s/.test(data.advice)){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>throw new Error("Invalid advice");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!boundedText(data.quote,32)) throw new Error("Invalid quote");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const lines = data.quote.trim().split(/\r?\n/);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(lines.length&gt;2||lines.some(line=&gt;Array.from(line).length&gt;16)){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>throw new Error("Quote exceeds display size");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!boundedText(data.note,50)||!boundedText(data.mood,18)){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>throw new Error("Invalid pairing");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>return {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>entry:{</p>
-<p class="p1"><span class="Apple-converted-space">        </span>...entry,</p>
-<p class="p1"><span class="Apple-converted-space">        </span>advice:data.advice.trim(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>quote:data.quote.trim(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>note:data.note.trim(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>mood:data.mood.trim(),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>credit:"今日短句 · AI生成"</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>usedFallback:false</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}catch(error){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>/* 网络失败时仍能正常玩，使用本地匹配内容。 */</p>
-<p class="p1"><span class="Apple-converted-space">    </span>return {entry,usedFallback:true};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}finally{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>clearTimeout(timer);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">async function spin(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(busy) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>setBusy(true);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").classList.add("pulled");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("machine").classList.add("rolling");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("status").textContent = "宜忌转动，一句话正在赶来……";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>const chosen = nextIndex(currentIndex);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let tick = 0;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let interval = null;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!reduceMotion()){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>interval = setInterval(()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">      </span>renderMachine(DATABASE[(chosen+(tick++))%DATABASE.length]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>},95);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const [result] = await Promise.all([</p>
-<p class="p1"><span class="Apple-converted-space">      </span>requestAI({...DATABASE[chosen]}),</p>
-<p class="p1"><span class="Apple-converted-space">      </span>sleep(reduceMotion()?100:1200)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>currentIndex = chosen;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>current = result.entry;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("status").textContent = result.usedFallback</p>
-<p class="p1"><span class="Apple-converted-space">      </span>? "AI 暂不可用，已抽取本地内容。按中间按钮留下这一签。"</p>
-<p class="p1"><span class="Apple-converted-space">      </span>: `今日「${current.advice}」 · 按中间按钮，把这一签留下。`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}catch(error){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("status").textContent = "这次没转起来，请再试一次。";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}finally{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(interval!==null) clearInterval(interval);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>renderMachine(current);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("machine").classList.remove("rolling");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("lever").classList.remove("pulled");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setBusy(false);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">/* 支持鼠标、触屏拖动，以及键盘原生按钮操作。 */</p>
-<p class="p1">let pointerStart = null;</p>
-<p class="p1">let dragged = false;</p>
-<p class="p1">let ignoreClickUntil = 0;</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("pointerdown",event=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(busy||event.button!==0) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointerStart = event.clientY;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>dragged = false;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").setPointerCapture(event.pointerId);</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("pointermove",event=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(pointerStart===null||busy) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const distance = Math.max(0,event.clientY-pointerStart);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").style.transform = `rotate(${Math.min(35,distance*.5)}deg)`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(distance&gt;25) dragged = true;</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("pointerup",()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(pointerStart===null) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointerStart = null;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").style.transform = "";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(dragged){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ignoreClickUntil = Date.now()+500;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>spin();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("pointercancel",()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointerStart = null;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>dragged = false;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").style.transform = "";</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("lostpointercapture",()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>pointerStart = null;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("lever").style.transform = "";</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">$("lever").addEventListener("click",()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(Date.now()&lt;ignoreClickUntil) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>spin();</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">function renderCard(snapshot){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const {entry,date,number} = snapshot;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-no").textContent = `№ ${String(number).padStart(3,"0")}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-month").textContent = date.month;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-day").textContent = date.day;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-week").textContent = `${date.week} · ${date.year}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-advice").textContent = entry.advice;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-quote").textContent = entry.quote;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-credit").textContent = entry.credit;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-drink").textContent = entry.name;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-en").textContent = entry.englishName;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-note").textContent = entry.note;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-mood").textContent = `搭配心情 / ${entry.mood}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("card-date").textContent = date.full;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">$("print").addEventListener("click",async()=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(busy) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>setBusy(true);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>/* 深拷贝当前内容，之后再抽签不会修改已出的小卡。 */</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const snapshot = {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>entry:{...current},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>date:{...DATE},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>number:serial+1</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("status").textContent = "正在印下今天……";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>$("machine").classList.add("printing");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>await sleep(reduceMotion()?100:950);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>printed = snapshot;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>serial = snapshot.number;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>renderCard(snapshot);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("empty").hidden = true;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("result").hidden = false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("result").classList.remove("appear");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>void $("result").offsetWidth;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("result").classList.add("appear");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("status").textContent = "小卡已出炉，今天值得收藏。";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(window.matchMedia("(max-width:760px)").matches){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>$("result").scrollIntoView({</p>
-<p class="p1"><span class="Apple-converted-space">        </span>behavior:reduceMotion()?"auto":"smooth",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>block:"start"</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}finally{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("machine").classList.remove("printing");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setBusy(false);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">});</p>
-<p class="p2"><br></p>
-<p class="p1">/* 根据真实文字宽度换行，保存长酒名和中文时不裁切。 */</p>
-<p class="p1">function wrapText(ctx,text,maxWidth){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const result = [];</p>
-<p class="p1"><span class="Apple-converted-space">  </span>for(const paragraph of text.split("\n")){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>let line = "";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>for(const character of Array.from(paragraph)){</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const candidate = line+character;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if(line&amp;&amp;ctx.measureText(candidate).width&gt;maxWidth){</p>
-<p class="p1"><span class="Apple-converted-space">        </span>result.push(line);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>line = character;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}else{</p>
-<p class="p1"><span class="Apple-converted-space">        </span>line = candidate;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>result.push(line);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>return result;</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">function drawFitted(ctx,text,y,startSize,maxWidth,family){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let size = startSize;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>ctx.font = `${size}px ${family}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>while(size&gt;18&amp;&amp;ctx.measureText(text).width&gt;maxWidth){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>size--;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = `${size}px ${family}`;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>ctx.fillText(text,500,y);</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">async function saveCard(){</p>
-<p class="p1"><span class="Apple-converted-space">  </span>if(!printed) return;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const snapshot = {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>entry:{...printed.entry},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>date:{...printed.date},</p>
-<p class="p1"><span class="Apple-converted-space">    </span>number:printed.number</p>
-<p class="p1"><span class="Apple-converted-space">  </span>};</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const button = $("save");</p>
-<p class="p1"><span class="Apple-converted-space">  </span>button.disabled = true;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>try{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(document.fonts?.ready) await document.fonts.ready;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const canvas = document.createElement("canvas");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>canvas.width = 1000;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>canvas.height = 1500;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const ctx = canvas.getContext("2d");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if(!ctx) throw new Error("Canvas unavailable");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const {entry,date,number} = snapshot;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const serif = '"Songti SC","STSong","SimSun",serif';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = "#ffffff";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillRect(0,0,1000,1500);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeStyle = "#242423";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineWidth = 2;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.strokeRect(40,40,920,1420);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.fillStyle = "#242423";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.textAlign = "center";</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.textBaseline = "alphabetic";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const text = (content,y,size=32)=&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>drawFitted(ctx,content,y,size,820,serif);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>text("单 向 历",125,48);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(`${date.month} · ${date.year}`,205,28);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>drawFitted(ctx,date.day,475,270,820,'Georgia,"Times New Roman",serif');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(date.week,540,32);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(entry.advice,645,58);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = `36px ${serif}`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const quoteLines = wrapText(ctx,entry.quote,800);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>quoteLines.forEach((line,index)=&gt;text(line,735+index*52,36));</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(entry.credit,885,23);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.setLineDash([8,8]);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.beginPath();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.moveTo(70,935);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.lineTo(930,935);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.stroke();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.setLineDash([]);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>text("为这一刻，配一杯",1005,26);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(entry.name,1085,48);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>drawFitted(ctx,entry.englishName,1140,30,800,"Georgia,serif");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.font = `29px ${serif}`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const noteLines = wrapText(ctx,entry.note,800);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>noteLines.forEach((line,index)=&gt;text(line,1205+index*42,29));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(`搭配心情 / ${entry.mood}`,1345,24);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>text(`${date.full}<span class="Apple-converted-space">  </span>/<span class="Apple-converted-space">  </span>OWSPACE<span class="Apple-converted-space">  </span>/<span class="Apple-converted-space">  </span>№ ${String(number).padStart(3,"0")}`,1420,22);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const blob = await new Promise((resolve,reject)=&gt;{</p>
-<p class="p1"><span class="Apple-converted-space">      </span>canvas.toBlob(</p>
-<p class="p1"><span class="Apple-converted-space">        </span>value=&gt;value?resolve(value):reject(new Error("PNG export failed")),</p>
-<p class="p1"><span class="Apple-converted-space">        </span>"image/png"</p>
-<p class="p1"><span class="Apple-converted-space">      </span>);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const url = URL.createObjectURL(blob);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const anchor = document.createElement("a");</p>
-<p class="p1"><span class="Apple-converted-space">    </span>anchor.href = url;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>anchor.download = `单向历-${date.full}-${number}.png`;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.body.appendChild(anchor);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>anchor.click();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>anchor.remove();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>setTimeout(()=&gt;URL.revokeObjectURL(url),30000);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("status").textContent = "小卡图片已生成。若未自动保存，请检查浏览器下载设置。";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}catch(error){</p>
-<p class="p1"><span class="Apple-converted-space">    </span>$("status").textContent = "图片保存失败，请重试，或使用浏览器截图保存小卡。";</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}finally{</p>
-<p class="p1"><span class="Apple-converted-space">    </span>button.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p1">}</p>
-<p class="p2"><br></p>
-<p class="p1">$("save").addEventListener("click",saveCard);</p>
-<p class="p1">renderMachine(current);</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<header>
+  <div class="brand">OWSPACE <span>单向历</span></div>
+  <span class="header-note">日子有定，偶遇随机。</span>
+</header>
+
+<main>
+<section aria-label="单向历抽签机">
+  <div class="intro">
+    <span class="eyebrow">THE DAILY CHANCE</span>
+    <h1>给今天，一点偶然。</h1>
+    <p>拉下把手抽一签，再按按钮印下今日小卡。</p>
+  </div>
+
+  <div class="machine" id="machine">
+    <!-- 内联轮廓，不依赖外部图片。 -->
+    <svg class="machine-frame" viewBox="0 0 600 650"
+         aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#242423" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round">
+        <path d="M84 39 L497 42 L510 508 L91 510 Z"/>
+        <path d="M84 39 L74 51 L57 551 L67 614 L525 611 L526 548 L510 508"/>
+        <path d="M74 51 L485 53 L497 42"/>
+        <path d="M91 510 L57 551 L526 548 L510 508"/>
+        <path d="M57 551 L526 548"/>
+        <path d="M100 105 L480 107 L483 305 L98 307 Z"/>
+        <path d="M106 113 L473 115 L476 297 L105 298 Z"/>
+        <ellipse cx="290" cy="128" rx="51" ry="15"/>
+        <path d="M96 321 Q93 319 92 326 L91 376
+                 Q93 383 100 382 L484 380
+                 Q490 379 489 372 L488 325 Q487 319 480 321 Z"/>
+        <path d="M101 327 L479 327 L480 374 L100 375 Z"/>
+        <path d="M92 394 L490 393 L494 494 L89 496 Z"/>
+        <path d="M99 401 L483 401 L486 487 L97 488 Z"/>
+        <path d="M174 575 L422 573 L422 607 L173 609 Z"/>
+        <path d="M180 578 L180 601 L416 600 L416 576"/>
+        <path d="M173 609 L180 601 M422 607 L416 600"/>
+        <path d="M192 533 L244 532 M349 533 L400 532"/>
+        <path d="M509 424 L522 424 L523 452 L511 455"/>
+      </g>
+    </svg>
+
+    <div class="machine-title print-type">单向历</div>
+    <div class="date">
+      <span class="month" id="month"></span>
+      <strong class="day" id="day"></strong>
+      <span class="week" id="week"></span>
+      <span class="year" id="year"></span>
+    </div>
+    <div class="advice print-type"><span id="advice"></span></div>
+    <div class="quote">
+      <p id="quote"></p>
+      <small id="quote-credit">— 今日短句 · 原创 —</small>
+    </div>
+
+    <button class="lever" id="lever" type="button"
+            aria-label="拉下把手，随机抽签" title="向下拖动或点击抽签">
+      <svg viewBox="0 0 75 195" aria-hidden="true">
+        <path d="M11 187 L48 30 L54 31 L17 189 Z"
+              fill="#f7f7f5" stroke="#242423" stroke-width="1.8"/>
+        <circle class="ball" cx="52" cy="24" r="21" fill="#242423"/>
+        <ellipse cx="45" cy="16" rx="4" ry="5" fill="white"/>
+      </svg>
+    </button>
+
+    <button class="print-button" id="print" type="button"
+            aria-label="生成今日小卡" title="印下今日小卡">
+      <svg viewBox="0 0 80 45" aria-hidden="true">
+        <path d="M10 16 L10 31 C10 45 70 45 70 31 L70 16"
+              fill="#f7f7f5" stroke="#242423" stroke-width="1.8"/>
+        <ellipse cx="40" cy="16" rx="30" ry="12"
+                 fill="white" stroke="#242423" stroke-width="1.8"/>
+      </svg>
+    </button>
+
+    <div class="ticket-slot"><div class="ticket">今日一签</div></div>
+  </div>
+
+  <p class="status" id="status" role="status" aria-live="polite">
+    把手可以向下拖动，也可以轻点。
+  </p>
+  <div class="steps">
+    <span>01 拉下把手</span><span>02 按钮出卡</span><span>03 收藏今日</span>
+  </div>
+</section>
+
+<aside class="card-area" aria-label="今日小卡">
+  <div class="empty" id="empty">
+    <span class="empty-number">№ 001</span>
+    <h2>今天的偶然，<br>还在路上。</h2>
+    <p>按下机器中间的按钮，<br>一张日历、一句话、一杯酒，<br>一起留在小卡上。</p>
+    <span class="empty-bottom">待 出 卡</span>
+  </div>
+
+  <div id="result" hidden>
+    <div class="card-top">
+      <span>YOUR DAILY EDITION</span><span id="card-no"></span>
+    </div>
+    <article class="card">
+      <div class="card-brand">单向历 <small>今日一签</small></div>
+      <div class="card-date">
+        <span id="card-month"></span>
+        <strong id="card-day"></strong>
+        <span id="card-week"></span>
+      </div>
+      <h2 id="card-advice"></h2>
+      <blockquote id="card-quote"></blockquote>
+      <p class="credit" id="card-credit"></p>
+      <div class="tear"></div>
+      <section class="drink">
+        <span class="drink-label">为这一刻，配一杯</span>
+        <h3 id="card-drink"></h3>
+        <span class="drink-en" id="card-en"></span>
+        <p id="card-note"></p>
+        <span class="mood" id="card-mood"></span>
+      </section>
+      <footer class="card-footer">
+        <span id="card-date"></span><span>OWSPACE</span>
+      </footer>
+    </article>
+    <button class="save" id="save" type="button">
+      保存今日小卡 <span>↓</span>
+    </button>
+    <p class="save-note">配酒为主题搭配灵感 · 请适量饮用</p>
+  </div>
+</aside>
+</main>
+
+<footer class="page-footer">
+  <span>单向历 · 今日一签</span>
+  <span>每一次偶遇，都值得被留下。</span>
+</footer>
+
+<script>
+"use strict";
+
+/*
+ * AI 接口预留
+ * 默认关闭，保存为本地 HTML 后无需服务器即可使用全部 50 组内容。
+ *
+ * 开启方式：
+ * 1. 自行部署后端代理，将 API 密钥放在后端环境变量中。
+ * 2. enabled 改为 true，endpoint 填入自己的后端地址。
+ * 3. 不要在 HTML、前端 JS 或请求参数里放服务商 API 密钥。
+ *
+ * POST 请求：
+ * {
+ *   date: "2026.09.11",
+ *   selectedCocktail: { id, name, englishName },
+ *   fallback: { advice, quote }
+ * }
+ *
+ * JSON 响应：
+ * {
+ *   advice: "宜 留点空白",
+ *   quote: "把一天留白一点，\n才有地方容纳偶然。",
+ *   note: "为今天的一点留白，配一杯金汤力。",
+ *   mood: "留白 · 偶然"
+ * }
+ *
+ * 接口应生成原创短句，不要伪造文学作者和出处。
+ * 本地 file:// 调用远程接口时，需要后端配置适当的 CORS。
+ * 服务端还应实现鉴权、请求校验和速率限制。
+ */
+const AI_CONFIG = Object.freeze({
+  enabled: false,
+  endpoint: "",
+  timeoutMs: 10000
+});
+
+/*
+ * 数据列：
+ * 英文名 | 中文名 | 宜忌 | 原创短句（/ 表示换行） | 搭配心情
+ * 保留用户提供的全部 50 款，包括 Alexander 与 Brandy Alexander。
+ */
+const RAW_DATA = `
+Americano|阿美利加诺|宜 闲坐片刻|坐下来，听时间/把脚步放轻。|闲适 · 街角
+John Collins|约翰柯林斯|宜 轻松开场|不必准备完美的开头，/一句你好就够了。|交谈 · 松弛
+Horse’s Neck|马颈|宜 信步而行|沿着弯曲的小路，/也能走进开阔的今天。|漫步 · 好奇
+Cuba Libre|自由古巴|忌 自设围墙|窗外没有催促，/是心先想起了远方。|自由 · 出走
+Moscow Mule|莫斯科骡子|宜 坚持小事|把一件小事做好，/也是向生活迈进一步。|踏实 · 耐心
+Zombie|僵尸|忌 机械重复|别让昨天的惯性，/替今天写完所有台词。|变化 · 新意
+Mai Tai|迈泰|宜 想象假期|还没出发的假期，/也能先在心里放晴。|假日 · 想象
+Bloody Mary|血腥玛丽|忌 千篇一律|把不同的那一面，/也放进今天的生活。|个性 · 尝试
+Piña Colada|椰林飘香|宜 偷闲半日|今天的空白，/不必急着填满。|休闲 · 放空
+Sea Breeze|海风|宜 开窗听风|风经过窗口，/没有带来待办清单。|开阔 · 自在
+Old Fashioned|古典|宜 重逢自己|走过那么多地方，/也别忘了回到自己身旁。|回望 · 熟悉
+Negroni|尼格罗尼|忌 讨好所有|不必成为所有人的风景，/先做自己的窗。|独立 · 坦然
+Manhattan|曼哈顿|忌 急于答案|有时，问题本身/就是一条值得走的路。|思索 · 从容
+Boulevardier|花花公子|宜 盛装赴约|认真选择一件衣服，/也是认真迎接今天。|仪式 · 赴约
+Dry Martini|干马天尼|忌 过度解释|有些沉默，/已经把自己说得很完整。|简洁 · 沉静
+Whiskey Sour|威士忌酸|忌 预支明天|明天还没有来，/先把今天好好收下。|当下 · 平衡
+Daiquiri|得其利|宜 化繁为简|少带一点行李，/就多一点伸手的余地。|简单 · 轻盈
+Margarita|玛格丽特|宜 小小冒险|在熟悉的路上拐个弯，/故事就有了新的一页。|探索 · 勇气
+Sidecar|边车|宜 并肩同行|有人一起走，/寻常的路也有了回声。|陪伴 · 同行
+Black Russian|黑俄罗斯|宜 安静独处|把喧闹留在门外，/听自己把一句话说完。|安静 · 内省
+Godfather|教父|宜 守住承诺|可靠并不喧哗，/它只是如约而来。|承诺 · 笃定
+Martinez|马丁内斯|宜 翻阅旧书|旧书的折角里，/还住着从前的自己。|阅读 · 重温
+Gin Tonic|金汤力|宜 留点空白|把一天留白一点，/才有地方容纳偶然。|留白 · 偶然
+Screwdriver|螺丝起子|宜 动手试试|想到的那件小事，/不妨从双手开始。|行动 · 创造
+Rusty Nail|生锈钉|忌 执着旧事|有些钉子松开了，/墙上才挂得下新风景。|放下 · 更新
+Alexander|亚历山大|宜 温柔以待|把话说轻一些，/也能让心意被听见。|温柔 · 体贴
+White Lady|白色佳人|忌 匆忙定义|一朵云不需要名字，/也能好好经过天空。|开放 · 留白
+Gin Sling|金司令|宜 随心摇摆|偶尔不踩整齐的拍子，/也能跳完自己的舞。|节奏 · 自如
+Planter's Punch|种植者宾治|宜 播种期待|埋下一颗小小的种子，/把等待交给日常。|生长 · 期待
+Gold Rush|淘金热|忌 追逐所有|不必捡起每一道光，/握住照亮你的那一束。|专注 · 取舍
+Long Island Iced Tea|长岛冰茶|宜 聊到尽兴|话题绕了几个弯，/才走到真正想说的地方。|交谈 · 相聚
+Grasshopper|蚱蜢|宜 轻巧转身|换个方向，/也许就遇见另一片草地。|灵动 · 转机
+Godmother|教母|宜 关照他人|记得别人随口的小事，/也是一种温柔。|关怀 · 细心
+Kamikaze|神风|忌 冲动决定|让念头停一停，/再决定把脚步交给哪里。|审慎 · 自主
+Paper Plane|纸飞机|宜 寄出心意|把没说出口的话折好，/让它去见想念的人。|想念 · 表达
+Penicillin|盘尼西林|宜 照顾自己|把照顾别人的耐心，/也分一点给自己。|关照 · 休息
+Pisco Sour|皮斯科酸|宜 认识不同|多听一种声音，/世界就多开一扇窗。|好奇 · 倾听
+French Martini|法国马天尼|宜 写封情书|认真写下的喜欢，/会让平常的一天发亮。|浪漫 · 真诚
+Dirty Martini|脏马天尼|忌 苛求完美|一点不整齐，/正好证明生活来过。|真实 · 接纳
+White Negroni|白尼格罗尼|宜 换个角度|把熟悉的画面翻一页，/还能读出新的意思。|视角 · 发现
+Jungle Bird|丛林鸟|宜 走近自然|离开屏幕一会儿，/去看树影怎么移动。|自然 · 观察
+Rob Roy|罗布罗伊|宜 坚定表达|声音不必很大，/也可以把心意说清。|坚定 · 诚恳
+Bamboo|竹|宜 保留弹性|不必每次都硬碰硬，/弯一弯也能继续生长。|柔韧 · 从容
+Irish Coffee|爱尔兰咖啡|宜 重温片刻|有些寻常的下午，/想起来仍有温度。|回忆 · 温暖
+Bee’s Knees|蜜蜂之膝|宜 赞美小事|今天也有值得夸奖的事，/比如你认真看了一朵花。|欣赏 · 善意
+Bramble|黑莓|宜 寻找细节|不被留意的小角落，/也藏着完整的风景。|细节 · 观察
+Scofflaw|斯考夫劳|忌 照单全收|别人的地图，/未必标着你想去的地方。|判断 · 自主
+Gimlet|吉姆雷特|宜 直抒胸臆|绕了很久的话，/今天试着直接说。|直接 · 坦诚
+Brandy Alexander|白兰地亚历山大|宜 收藏温柔|把被善待的瞬间记下，/阴天也有可以翻开的光。|珍藏 · 温柔
+Gin Fizz|金菲士|宜 重新开始|翻到新的一页，/第一行仍然由你来写。|起点 · 新鲜
+`;
+
+const DATABASE = RAW_DATA.trim().split("\n").map((line,index)=>{
+  const [englishName,name,advice,quote,mood] = line.split("|");
+  return Object.freeze({
+    id:index+1,
+    englishName,
+    name,
+    advice,
+    quote:quote.replaceAll("/","\n"),
+    mood,
+    note:`为今天的「${advice.slice(2)}」，配一杯${name}。`,
+    credit:"今日短句 · 原创"
+  });
+});
+
+const $ = id=>document.getElementById(id);
+const reduceMotion = ()=>window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const sleep = ms=>new Promise(resolve=>setTimeout(resolve,ms));
+
+/* 日期在打开页面时确定，抽签不改变日期。 */
+const openedAt = new Date();
+const DATE = Object.freeze({
+  day:String(openedAt.getDate()).padStart(2,"0"),
+  month:openedAt.toLocaleDateString("zh-CN",{month:"long"}),
+  week:openedAt.toLocaleDateString("zh-CN",{weekday:"long"}),
+  year:String(openedAt.getFullYear()),
+  full:[
+    openedAt.getFullYear(),
+    String(openedAt.getMonth()+1).padStart(2,"0"),
+    String(openedAt.getDate()).padStart(2,"0")
+  ].join(".")
+});
+
+let currentIndex = 22;
+let current = {...DATABASE[currentIndex]};
+let printed = null;
+let busy = false;
+let serial = 0;
+
+$("month").textContent = DATE.month;
+$("day").textContent = DATE.day;
+$("week").textContent = DATE.week;
+$("year").textContent = DATE.year;
+
+function renderMachine(entry){
+  $("advice").textContent = entry.advice;
+  $("quote").textContent = entry.quote;
+  $("quote-credit").textContent = `— ${entry.credit} —`;
+}
+
+function setBusy(value){
+  busy = value;
+  $("lever").disabled = value;
+  $("print").disabled = value;
+  $("machine").setAttribute("aria-busy",String(value));
+}
+
+/* 拒绝采样，避免取模偏差；无 Web Crypto 时退回普通随机数。 */
+function randomInteger(max){
+  if(!Number.isInteger(max)||max<1) throw new Error("Invalid random range");
+  if(!globalThis.crypto?.getRandomValues) return Math.floor(Math.random()*max);
+  const limit = Math.floor(4294967296/max)*max;
+  const buffer = new Uint32Array(1);
+  do{crypto.getRandomValues(buffer)}while(buffer[0]>=limit);
+  return buffer[0]%max;
+}
+
+/* 每次避开上一款，其余酒款均可被抽取。 */
+function nextIndex(previous){
+  return (previous+1+randomInteger(DATABASE.length-1))%DATABASE.length;
+}
+
+function boundedText(value,maxLength){
+  return typeof value==="string" &&
+    value.trim().length>0 &&
+    Array.from(value.trim()).length<=maxLength;
+}
+
+async function requestAI(entry){
+  if(!AI_CONFIG.enabled) return {entry,usedFallback:false};
+
+  const controller = new AbortController();
+  const timer = setTimeout(()=>controller.abort(),AI_CONFIG.timeoutMs);
+
+  try{
+    if(!AI_CONFIG.endpoint) throw new Error("AI endpoint is not configured");
+
+    const endpoint = new URL(AI_CONFIG.endpoint,window.location.href);
+    if(!["https:","http:"].includes(endpoint.protocol)){
+      throw new Error("Unsupported endpoint");
+    }
+
+    const response = await fetch(endpoint.href,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      signal:controller.signal,
+      credentials:"same-origin",
+      body:JSON.stringify({
+        date:DATE.full,
+        selectedCocktail:{
+          id:entry.id,
+          name:entry.name,
+          englishName:entry.englishName
+        },
+        fallback:{advice:entry.advice,quote:entry.quote}
+      })
+    });
+
+    if(!response.ok) throw new Error("AI request failed");
+    const data = await response.json();
+
+    if(!boundedText(data.advice,9)||!/^[宜忌]\s/.test(data.advice)){
+      throw new Error("Invalid advice");
+    }
+    if(!boundedText(data.quote,32)) throw new Error("Invalid quote");
+
+    const lines = data.quote.trim().split(/\r?\n/);
+    if(lines.length>2||lines.some(line=>Array.from(line).length>16)){
+      throw new Error("Quote exceeds display size");
+    }
+    if(!boundedText(data.note,50)||!boundedText(data.mood,18)){
+      throw new Error("Invalid pairing");
+    }
+
+    return {
+      entry:{
+        ...entry,
+        advice:data.advice.trim(),
+        quote:data.quote.trim(),
+        note:data.note.trim(),
+        mood:data.mood.trim(),
+        credit:"今日短句 · AI生成"
+      },
+      usedFallback:false
+    };
+  }catch(error){
+    /* 网络失败时仍能正常玩，使用本地匹配内容。 */
+    return {entry,usedFallback:true};
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+async function spin(){
+  if(busy) return;
+  setBusy(true);
+  $("lever").classList.add("pulled");
+  $("machine").classList.add("rolling");
+  $("status").textContent = "宜忌转动，一句话正在赶来……";
+
+  const chosen = nextIndex(currentIndex);
+  let tick = 0;
+  let interval = null;
+
+  if(!reduceMotion()){
+    interval = setInterval(()=>{
+      renderMachine(DATABASE[(chosen+(tick++))%DATABASE.length]);
+    },95);
+  }
+
+  try{
+    const [result] = await Promise.all([
+      requestAI({...DATABASE[chosen]}),
+      sleep(reduceMotion()?100:1200)
+    ]);
+    currentIndex = chosen;
+    current = result.entry;
+    $("status").textContent = result.usedFallback
+      ? "AI 暂不可用，已抽取本地内容。按中间按钮留下这一签。"
+      : `今日「${current.advice}」 · 按中间按钮，把这一签留下。`;
+  }catch(error){
+    $("status").textContent = "这次没转起来，请再试一次。";
+  }finally{
+    if(interval!==null) clearInterval(interval);
+    renderMachine(current);
+    $("machine").classList.remove("rolling");
+    $("lever").classList.remove("pulled");
+    setBusy(false);
+  }
+}
+
+/* 支持鼠标、触屏拖动，以及键盘原生按钮操作。 */
+let pointerStart = null;
+let dragged = false;
+let ignoreClickUntil = 0;
+
+$("lever").addEventListener("pointerdown",event=>{
+  if(busy||event.button!==0) return;
+  pointerStart = event.clientY;
+  dragged = false;
+  $("lever").setPointerCapture(event.pointerId);
+});
+
+$("lever").addEventListener("pointermove",event=>{
+  if(pointerStart===null||busy) return;
+  const distance = Math.max(0,event.clientY-pointerStart);
+  $("lever").style.transform = `rotate(${Math.min(35,distance*.5)}deg)`;
+  if(distance>25) dragged = true;
+});
+
+$("lever").addEventListener("pointerup",()=>{
+  if(pointerStart===null) return;
+  pointerStart = null;
+  $("lever").style.transform = "";
+  if(dragged){
+    ignoreClickUntil = Date.now()+500;
+    spin();
+  }
+});
+
+$("lever").addEventListener("pointercancel",()=>{
+  pointerStart = null;
+  dragged = false;
+  $("lever").style.transform = "";
+});
+
+$("lever").addEventListener("lostpointercapture",()=>{
+  pointerStart = null;
+  $("lever").style.transform = "";
+});
+
+$("lever").addEventListener("click",()=>{
+  if(Date.now()<ignoreClickUntil) return;
+  spin();
+});
+
+function renderCard(snapshot){
+  const {entry,date,number} = snapshot;
+  $("card-no").textContent = `№ ${String(number).padStart(3,"0")}`;
+  $("card-month").textContent = date.month;
+  $("card-day").textContent = date.day;
+  $("card-week").textContent = `${date.week} · ${date.year}`;
+  $("card-advice").textContent = entry.advice;
+  $("card-quote").textContent = entry.quote;
+  $("card-credit").textContent = entry.credit;
+  $("card-drink").textContent = entry.name;
+  $("card-en").textContent = entry.englishName;
+  $("card-note").textContent = entry.note;
+  $("card-mood").textContent = `搭配心情 / ${entry.mood}`;
+  $("card-date").textContent = date.full;
+}
+
+$("print").addEventListener("click",async()=>{
+  if(busy) return;
+  setBusy(true);
+
+  /* 深拷贝当前内容，之后再抽签不会修改已出的小卡。 */
+  const snapshot = {
+    entry:{...current},
+    date:{...DATE},
+    number:serial+1
+  };
+
+  $("status").textContent = "正在印下今天……";
+  $("machine").classList.add("printing");
+
+  try{
+    await sleep(reduceMotion()?100:950);
+    printed = snapshot;
+    serial = snapshot.number;
+    renderCard(snapshot);
+    $("empty").hidden = true;
+    $("result").hidden = false;
+    $("result").classList.remove("appear");
+    void $("result").offsetWidth;
+    $("result").classList.add("appear");
+    $("status").textContent = "小卡已出炉，今天值得收藏。";
+
+    if(window.matchMedia("(max-width:760px)").matches){
+      $("result").scrollIntoView({
+        behavior:reduceMotion()?"auto":"smooth",
+        block:"start"
+      });
+    }
+  }finally{
+    $("machine").classList.remove("printing");
+    setBusy(false);
+  }
+});
+
+/* 根据真实文字宽度换行，保存长酒名和中文时不裁切。 */
+function wrapText(ctx,text,maxWidth){
+  const result = [];
+  for(const paragraph of text.split("\n")){
+    let line = "";
+    for(const character of Array.from(paragraph)){
+      const candidate = line+character;
+      if(line&&ctx.measureText(candidate).width>maxWidth){
+        result.push(line);
+        line = character;
+      }else{
+        line = candidate;
+      }
+    }
+    result.push(line);
+  }
+  return result;
+}
+
+function drawFitted(ctx,text,y,startSize,maxWidth,family){
+  let size = startSize;
+  ctx.font = `${size}px ${family}`;
+  while(size>18&&ctx.measureText(text).width>maxWidth){
+    size--;
+    ctx.font = `${size}px ${family}`;
+  }
+  ctx.fillText(text,500,y);
+}
+
+async function saveCard(){
+  if(!printed) return;
+  const snapshot = {
+    entry:{...printed.entry},
+    date:{...printed.date},
+    number:printed.number
+  };
+  const button = $("save");
+  button.disabled = true;
+
+  try{
+    if(document.fonts?.ready) await document.fonts.ready;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 1000;
+    canvas.height = 1500;
+    const ctx = canvas.getContext("2d");
+    if(!ctx) throw new Error("Canvas unavailable");
+
+    const {entry,date,number} = snapshot;
+    const serif = '"Songti SC","STSong","SimSun",serif';
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,1000,1500);
+    ctx.strokeStyle = "#242423";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(40,40,920,1420);
+    ctx.fillStyle = "#242423";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+
+    const text = (content,y,size=32)=>
+      drawFitted(ctx,content,y,size,820,serif);
+
+    text("单 向 历",125,48);
+    text(`${date.month} · ${date.year}`,205,28);
+    drawFitted(ctx,date.day,475,270,820,'Georgia,"Times New Roman",serif');
+    text(date.week,540,32);
+    text(entry.advice,645,58);
+
+    ctx.font = `36px ${serif}`;
+    const quoteLines = wrapText(ctx,entry.quote,800);
+    quoteLines.forEach((line,index)=>text(line,735+index*52,36));
+    text(entry.credit,885,23);
+
+    ctx.setLineDash([8,8]);
+    ctx.beginPath();
+    ctx.moveTo(70,935);
+    ctx.lineTo(930,935);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    text("为这一刻，配一杯",1005,26);
+    text(entry.name,1085,48);
+    drawFitted(ctx,entry.englishName,1140,30,800,"Georgia,serif");
+
+    ctx.font = `29px ${serif}`;
+    const noteLines = wrapText(ctx,entry.note,800);
+    noteLines.forEach((line,index)=>text(line,1205+index*42,29));
+
+    text(`搭配心情 / ${entry.mood}`,1345,24);
+    text(`${date.full}  /  OWSPACE  /  № ${String(number).padStart(3,"0")}`,1420,22);
+
+    const blob = await new Promise((resolve,reject)=>{
+      canvas.toBlob(
+        value=>value?resolve(value):reject(new Error("PNG export failed")),
+        "image/png"
+      );
+    });
+
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `单向历-${date.full}-${number}.png`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),30000);
+
+    $("status").textContent = "小卡图片已生成。若未自动保存，请检查浏览器下载设置。";
+  }catch(error){
+    $("status").textContent = "图片保存失败，请重试，或使用浏览器截图保存小卡。";
+  }finally{
+    button.disabled = false;
+  }
+}
+
+$("save").addEventListener("click",saveCard);
+renderMachine(current);
+</script>
 </body>
 </html>
