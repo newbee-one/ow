@@ -193,6 +193,14 @@ h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+
+.image-result{margin-top:22px;padding-top:16px;border-top:1px dashed var(--line)}
+.image-tip{text-align:center;font-size:14px;line-height:1.8;margin:0 0 14px}
+#card-image{display:block;width:100%;height:auto;box-shadow:0 6px 24px #0000000d;-webkit-touch-callout:default;user-select:auto;-webkit-user-select:auto;touch-action:auto}
+.image-actions{display:flex;gap:10px;margin-top:14px}
+.image-actions button,.image-actions a{flex:1;display:block;text-align:center;border:1px solid var(--ink);background:white;color:var(--ink);padding:12px 8px;font:14px "Songti SC","SimSun",serif;text-decoration:none;cursor:pointer}
+.image-actions button:disabled{opacity:.5;cursor:wait}
+
 </style>
 </head>
 <body>
@@ -317,8 +325,17 @@ h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}
       </footer>
     </article>
     <button class="save" id="save" type="button">
-      保存今日小卡 <span>↓</span>
+      生成图片，长按保存 <span>↓</span>
     </button>
+    <section id="image-result" class="image-result" hidden aria-label="可长按保存的今日小卡图片">
+      <p class="image-tip">长按下方图片，可保存到相册或分享给朋友</p>
+      <img id="card-image" alt="今日小卡：日期、宜忌、短句与推荐酒款" draggable="true">
+      <div class="image-actions">
+        <button id="share-image" type="button" hidden>分享给朋友</button>
+        <a id="download-image">下载图片</a>
+      </div>
+      <p id="image-status" class="save-note" role="status">长按菜单由浏览器提供；也可使用下方下载图片。</p>
+    </section>
     <p class="save-note">配酒为主题搭配灵感 · 请适量饮用</p>
   </div>
 </aside>
@@ -684,6 +701,11 @@ $("print").addEventListener("click",async()=>{
     printed = snapshot;
     serial = snapshot.number;
     renderCard(snapshot);
+    // 新卡生成后清除旧图片，避免分享上一次抽签结果。
+    $("image-result").hidden = true;
+    $("card-image").removeAttribute("src");
+    $("download-image").removeAttribute("href");
+    shareableCardFile = null;
     $("empty").hidden = true;
     $("result").hidden = false;
     $("result").classList.remove("appear");
@@ -731,6 +753,8 @@ function drawFitted(ctx,text,y,startSize,maxWidth,family){
   }
   ctx.fillText(text,500,y);
 }
+
+let shareableCardFile = null;
 
 async function saveCard(){
   if(!printed) return;
@@ -802,16 +826,28 @@ async function saveCard(){
       );
     });
 
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `单向历-${date.full}-${number}.png`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),30000);
-
-    $("status").textContent = "小卡图片已生成。若未自动保存，请检查浏览器下载设置。";
+    const filename = `单向历-${date.full}-${number}.png`;
+    // 使用实际 img 元素和持久 data URL，保留手机浏览器原生长按菜单。
+    // 不自动下载，不拦截 contextmenu，也不设置覆盖图片的点击层。
+    const dataUrl = canvas.toDataURL("image/png");
+    $("card-image").src = dataUrl;
+    $("card-image").alt = `${date.full}，${entry.advice}，${entry.quote}，推荐${entry.name}`;
+    $("download-image").href = dataUrl;
+    $("download-image").download = filename;
+    shareableCardFile = typeof File === "function"
+      ? new File([blob], filename, {type:"image/png"}) : null;
+    let supportsShare = false;
+    try{
+      supportsShare = !!(shareableCardFile && navigator.share && navigator.canShare &&
+        navigator.canShare({files:[shareableCardFile]}));
+    }catch(error){supportsShare = false;}
+    $("share-image").hidden = !supportsShare;
+    $("image-status").textContent = supportsShare
+      ? "可以长按图片，或点击“分享给朋友”选择应用。"
+      : "此浏览器未提供图片分享按钮，请长按图片；电脑可右键另存为。";
+    $("image-result").hidden = false;
+    $("image-result").scrollIntoView({behavior:reduceMotion()?"auto":"smooth",block:"start"});
+    $("status").textContent = "图片已生成，长按图片即可使用浏览器的保存或分享菜单。";
   }catch(error){
     $("status").textContent = "图片保存失败，请重试，或使用浏览器截图保存小卡。";
   }finally{
@@ -819,6 +855,20 @@ async function saveCard(){
   }
 }
 
+$("share-image").addEventListener("click",async()=>{
+  if(!shareableCardFile || !navigator.share) return;
+  const button = $("share-image");
+  button.disabled = true;
+  try{
+    // 在直接点击事件内调用，以保留浏览器要求的用户手势。
+    await navigator.share({files:[shareableCardFile]});
+    $("image-status").textContent = "已交给系统分享。";
+  }catch(error){
+    $("image-status").textContent = error.name === "AbortError"
+      ? "已取消分享，图片仍可长按保存。"
+      : "此浏览器暂时无法分享，请长按图片或下载后发送。";
+  }finally{button.disabled = false;}
+});
 $("save").addEventListener("click",saveCard);
 renderMachine(current);
 </script>
