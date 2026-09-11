@@ -212,7 +212,7 @@ h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}
   <div class="machine" id="machine">
     <!-- 内联轮廓，不依赖外部图片。 -->
     <svg class="machine-frame" viewBox="0 0 600 650"
-         aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+         role="img" aria-label="单向历日期展示" xmlns="http://www.w3.org/2000/svg">
       <g fill="none" stroke="#242423" stroke-width="1.8"
          stroke-linecap="round" stroke-linejoin="round">
         <path d="M84 39 L497 42 L510 508 L91 510 Z"/>
@@ -235,15 +235,16 @@ h1{font-size:27px;font-weight:500;letter-spacing:4px;margin:12px 0}
         <path d="M192 533 L244 532 M349 533 L400 532"/>
         <path d="M509 424 L522 424 L523 452 L511 455"/>
       </g>
+      <!-- 日期与机身共用 SVG 坐标，中心线 x=290；窗口缩放时保持对齐。 -->
+      <g fill="#242423" text-anchor="middle"
+         font-family="Songti SC, STSong, SimSun, serif">
+        <text x="290" y="82" dominant-baseline="central" font-size="34" font-weight="900">单 向 历</text>
+        <text id="month" x="290" y="128" dominant-baseline="central" font-size="18"></text>
+        <text id="day" x="290" y="202" dominant-baseline="central" font-family="Georgia, Times New Roman, serif" font-size="84" font-weight="400"></text>
+        <text id="week" x="290" y="257" dominant-baseline="central" font-size="16"></text>
+        <text id="year" x="290" y="281" dominant-baseline="central" font-family="Georgia, Times New Roman, serif" font-size="14"></text>
+      </g>
     </svg>
-
-    <div class="machine-title print-type">单向历</div>
-    <div class="date">
-      <span class="month" id="month"></span>
-      <strong class="day" id="day"></strong>
-      <span class="week" id="week"></span>
-      <span class="year" id="year"></span>
-    </div>
     <div class="advice print-type"><span id="advice"></span></div>
     <div class="quote">
       <p id="quote"></p>
